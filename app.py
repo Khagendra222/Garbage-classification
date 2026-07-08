@@ -152,22 +152,21 @@ def render_prediction_page(model, class_names):
     col1, col2 = st.columns([1.1, 1], gap="large")
 
     with col1:
-       st.subheader("Uploaded Image")
-uploaded = st.file_uploader(
-    "Upload an image",
-    type=["jpg", "jpeg", "png"],
-    key="uploaded_image"
-)
+        st.subheader("Uploaded Image")
+        uploaded = st.file_uploader(
+            "Upload an image",
+            type=["jpg", "jpeg", "png"],
+            key="uploaded_image"
+        )
 
-if uploaded:
-    st.write("Filename:", uploaded.name)
+        if uploaded:
+            st.write("Filename:", uploaded.name)
 
-    uploaded.seek(0)
-    image_bytes = uploaded.read()
+            uploaded.seek(0)
+            image_bytes = uploaded.read()
 
-    img = Image.open(BytesIO(image_bytes)).convert("RGB")
-
-    st.image(img, use_container_width=True)
+            img = Image.open(BytesIO(image_bytes)).convert("RGB")
+            st.image(img, use_container_width=True)
 
             if st.button("Upload Another Image"):
                 st.session_state.uploaded_image = None
