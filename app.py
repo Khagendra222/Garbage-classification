@@ -1,6 +1,6 @@
 import os
 import json
-
+from io import BytesIO
 import streamlit as st
 from PIL import Image
 import numpy as np
@@ -152,12 +152,22 @@ def render_prediction_page(model, class_names):
     col1, col2 = st.columns([1.1, 1], gap="large")
 
     with col1:
-        st.subheader("Uploaded Image")
-        uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"], key="uploaded_image")
-        if uploaded:
-            st.write("Filename:", uploaded.name)
-            img = Image.open(uploaded)
-            st.image(img, use_container_width=True)
+       st.subheader("Uploaded Image")
+uploaded = st.file_uploader(
+    "Upload an image",
+    type=["jpg", "jpeg", "png"],
+    key="uploaded_image"
+)
+
+if uploaded:
+    st.write("Filename:", uploaded.name)
+
+    uploaded.seek(0)
+    image_bytes = uploaded.read()
+
+    img = Image.open(BytesIO(image_bytes)).convert("RGB")
+
+    st.image(img, use_container_width=True)
 
             if st.button("Upload Another Image"):
                 st.session_state.uploaded_image = None
